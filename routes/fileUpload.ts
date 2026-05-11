@@ -3,6 +3,10 @@
  * SPDX-License-Identifier: MIT
  */
 
+/*
+test 
+*/
+
 import os from 'os'
 import fs = require('fs')
 import challengeUtils = require('../lib/challengeUtils')
