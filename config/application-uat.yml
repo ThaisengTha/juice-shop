@@ -1,0 +1,4 @@
+axway:
+  domain: api-uat2.exttest.lab
+  client-key: ************************************
+  client-secret: AXWAY_CLIENT_SECRET_UAT2
