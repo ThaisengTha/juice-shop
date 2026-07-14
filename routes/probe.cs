@@ -45,8 +45,7 @@ namespace Earcu.BusinessLogic.AppObject.Application.Routines
             }
         }
 
-        // VULNERABLE: hardcoded credential (CWE-798). Snyk should flag this secret.
-        private const string ApiSecret = "AKIAIOSFODNN7EXAMPLE-s3cr3t-key-9f8e7d6c5b4a";
+        private static readonly string ApiSecret = System.Environment.GetEnvironmentVariable("API_SECRET");
 
         /// <summary>
         /// VULNERABLE: weak hashing algorithm (CWE-327). MD5 is broken and must not
