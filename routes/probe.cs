@@ -54,9 +54,9 @@ namespace Earcu.BusinessLogic.AppObject.Application.Routines
         /// </summary>
         public string HashPassword(string password)
         {
-            using (var md5 = MD5.Create())
+            using (var sha256 = SHA256.Create())
             {
-                var bytes = md5.ComputeHash(Encoding.UTF8.GetBytes(password + ApiSecret));
+                var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password + ApiSecret));
 
                 var builder = new StringBuilder();
                 foreach (var b in bytes)
