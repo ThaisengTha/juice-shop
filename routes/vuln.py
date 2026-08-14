@@ -37,9 +37,10 @@ def subtract(a, b):
 # Snyk Rule: python/CommandInjection
 # Risk: Attacker can pass "; rm -rf /" as user_input
 def run_command(user_input):
-    os.system("ping " + user_input)  # unsanitized input passed to shell
-    # Also detectable variant:
-    subprocess.call("ls " + user_input, shell=True)
+    import shlex
+    safe_input = shlex.quote(user_input)
+    subprocess.call(["ping", safe_input])
+    subprocess.call(["ls", safe_input])
 
 
 # [VULN 3] CWE-89 - SQL Injection
