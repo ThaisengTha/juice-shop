@@ -91,7 +91,7 @@ def load_data(serialized_data):
 # Snyk Rule: python/WeakCryptography
 # Risk: MD5 is broken; collisions can be generated; not suitable for passwords
 def hash_password(password):
-    return hashlib.md5(password.encode()).hexdigest()
+    return hashlib.sha256(password.encode()).hexdigest()
 
 
 # [VULN 7] CWE-22 - Path Traversal
