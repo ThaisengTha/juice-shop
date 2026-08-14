@@ -21,7 +21,7 @@ import re
 # [VULN 1] CWE-798 - Hardcoded Credentials
 # Snyk Rule: python/HardcodedCredentials
 DB_PASSWORD = "admin123"
-API_KEY = "d3adbeef1234567890abcdef"
+API_KEY = os.getenv("API_KEY")
 SECRET_TOKEN = "supersecrettoken"
 
 
