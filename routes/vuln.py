@@ -5,7 +5,7 @@ import subprocess
 import pickle
 import hashlib
 import yaml
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 import tempfile
 import random
 import logging
