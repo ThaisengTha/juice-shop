@@ -36,9 +36,11 @@ def subtract(a, b):
 # Snyk Rule: python/CommandInjection
 # Risk: Attacker can pass "; rm -rf /" as user_input
 def run_command(user_input):
-    os.system("ping " + user_input)  # unsanitized input passed to shell
-    # Also detectable variant:
-    subprocess.call("ls " + user_input, shell=True)
+    if not re.match(r"^[A-Za-z0-9.\-]+$", user_input):
+        raise ValueError("Invalid host")
+    safe_host = user_input
+    subprocess.call(["ping", safe_host])
+    subprocess.call(["ls", safe_host])
 
 
 # [VULN 3] CWE-89 - SQL Injection
