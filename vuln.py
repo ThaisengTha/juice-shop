@@ -5,7 +5,7 @@ import subprocess
 import pickle
 import hashlib
 import yaml
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 import tempfile
 import random
 import logging
@@ -58,7 +58,26 @@ def get_user(username):
 # Snyk Rule: python/CodeInjection
 # Risk: Attacker can pass "__import__('os').system('rm -rf /')"
 def calculate(expression):
-    return eval(expression)  # eval executes arbitrary Python code
+    import ast
+    import operator as _op
+    _ops = {
+        ast.Add: _op.add, ast.Sub: _op.sub, ast.Mult: _op.mul,
+        ast.Div: _op.truediv, ast.Mod: _op.mod, ast.Pow: _op.pow,
+        ast.FloorDiv: _op.floordiv, ast.USub: _op.neg, ast.UAdd: _op.pos,
+    }
+    def _eval(node):
+        if isinstance(node, ast.Expression):
+            return _eval(node.body)
+        if isinstance(node, ast.Num):
+            return node.n
+        if isinstance(node, ast.Constant) and isinstance(node.value, (int, float)):
+            return node.value
+        if isinstance(node, ast.BinOp) and type(node.op) in _ops:
+            return _ops[type(node.op)](_eval(node.left), _eval(node.right))
+        if isinstance(node, ast.UnaryOp) and type(node.op) in _ops:
+            return _ops[type(node.op)](_eval(node.operand))
+        raise ValueError("Unsafe expression")
+    return _eval(ast.parse(expression, mode="eval"))
 
 
 # [VULN 5] CWE-502 - Insecure Deserialization via pickle
@@ -72,7 +91,7 @@ def load_data(serialized_data):
 # Snyk Rule: python/WeakCryptography
 # Risk: MD5 is broken; collisions can be generated; not suitable for passwords
 def hash_password(password):
-    return hashlib.md5(password.encode()).hexdigest()
+    return hashlib.sha256(password.encode()).hexdigest()
 
 
 # [VULN 7] CWE-22 - Path Traversal
