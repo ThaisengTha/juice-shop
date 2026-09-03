@@ -58,7 +58,8 @@ def get_user(username):
 # Snyk Rule: python/CodeInjection
 # Risk: Attacker can pass "__import__('os').system('rm -rf /')"
 def calculate(expression):
-    return eval(expression)  # eval executes arbitrary Python code
+    import ast
+    return ast.literal_eval(expression)
 
 
 # [VULN 5] CWE-502 - Insecure Deserialization via pickle
