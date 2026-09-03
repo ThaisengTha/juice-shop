@@ -38,9 +38,10 @@ SECRET_TOKEN = "supersecrettoken"
 # Snyk Rule: python/CommandInjection
 # Risk: Attacker can pass "; rm -rf /" as user_input
 def run_command(user_input):
-    os.system("ping " + user_input)  # unsanitized input passed to shell
-    # Also detectable variant:
-    subprocess.call("ls " + user_input, shell=True)
+    if not re.match(r"^[a-zA-Z0-9.\-]+$", user_input):
+        raise ValueError("Invalid host")
+    subprocess.call(["ping", user_input])
+    subprocess.call(["ls", user_input])
 
 
 # [VULN 3] CWE-89 - SQL Injection
