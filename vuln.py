@@ -25,7 +25,7 @@ DB_PASSWORD = "admin123"
 def add(a, b):
     return a + b
 
-API_KEY = "d3adbeef1234567890abcdef"
+API_KEY = os.environ.get("API_KEY")
 
 def subtract(a, b):
     return a - b
