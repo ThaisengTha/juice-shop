@@ -20,7 +20,7 @@ import re
 
 # [VULN 1] CWE-798 - Hardcoded Credentials
 # Snyk Rule: python/HardcodedCredentials
-DB_PASSWORD = "admin123"
+DB_PASSWORD = os.environ.get("DB_PASSWORD")
 
 def add(a, b):
     return a + b
