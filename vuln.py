@@ -135,8 +135,11 @@ def load_config(yaml_data):
 # [VULN 14] CWE-918 - Server-Side Request Forgery (SSRF)
 # Snyk Rule: python/Ssrf
 # Risk: Attacker can make server fetch internal resources (e.g., http://169.254.169.254)
+ALLOWED_URLS = {"https://example.com", "https://api.example.com"}
 def fetch_url(user_provided_url):
-    response = requests.get(user_provided_url)  # no URL validation or allowlist
+    if user_provided_url not in ALLOWED_URLS:
+        raise ValueError("URL not allowed")
+    response = requests.get(ALLOWED_URLS.intersection({user_provided_url}).pop())
     return response.text
 
 
